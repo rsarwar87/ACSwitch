@@ -32,10 +32,10 @@
 using namespace std;
 
 static const array<Commandline::Option, 7> option = { {
-	{ "--toggle",		1,	1,	true,	Config::toggleAutomation },
 	{ "--update",		0,	2,	true,	Config::updateThresholds },
-	{ "--method",		1,	1,	true,	Method::parseAndRun },
+	{ "--toggle",		1,	1,	true,	Config::toggleAutomation },
 	{ "--init",			0,	0,	false,	Setup::initializeSwitch },
+	{ "--method",		1,	1,	true,	Method::parseAndRun },
 	{ "--daemon",		1,	1,	false,	Daemon::handleArgs },
 	{ "--info",			0,	0,	true,	Utility::printInfo },
 	{ "--help",			0,	0,	false,	Module::printHelp }
