@@ -42,14 +42,14 @@ bool Setup::configGood() {
 
 void Setup::checkOrDie() {
 	if (!configGood()) {
-		throw("Setup is incomplete, please configure first");
+		throw("Setup is incomplete, please initialize first");
 	}
 	if (!Daemon::isRunning()) {
 		throw("The daemon is not running, launch it first");
 	}
 }
 
-void Setup::configureSwitch(const vector<string>& args) {
+void Setup::initializeSwitch(const vector<string>& args) {
 	for (const Database::Switch& switch_ : Database::getSwitches()) {
 		setSwitch(switch_);
 

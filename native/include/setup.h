@@ -23,5 +23,5 @@
 namespace Setup {
 	bool configGood();
 	void checkOrDie();
-	void configureSwitch(const std::vector<std::string>& args);
+	void initializeSwitch(const std::vector<std::string>& args);
 }

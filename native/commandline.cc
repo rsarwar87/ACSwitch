@@ -35,7 +35,7 @@ static const array<Commandline::Option, 7> option = { {
 	{ "--toggle",		1,	1,	true,	Config::toggleAutomation },
 	{ "--update",		0,	2,	true,	Config::updateThresholds },
 	{ "--method",		1,	1,	true,	Method::parseAndRun },
-	{ "--configure",	0,	0,	false,	Setup::configureSwitch },
+	{ "--init",			0,	0,	false,	Setup::initializeSwitch },
 	{ "--daemon",		1,	1,	false,	Daemon::handleArgs },
 	{ "--info",			0,	0,	true,	Utility::printInfo },
 	{ "--help",			0,	0,	false,	Module::printHelp }
