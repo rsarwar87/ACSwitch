@@ -45,5 +45,5 @@ case $ARCH in
 esac
 
 if (($? != 0)); then
-	abort "Command \`clang++ $*\` failed"
+	abort "Compilation failed"
 fi

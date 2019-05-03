@@ -40,7 +40,7 @@ function signzip {
 
 rm -f $TEMPZIP $OUTZIP
 
-print "Packing a recovery flashable zip"
+print "Packing recovery flashable zip"
 makezip $TEMPZIP $MODULE
 
 print "Signing the zip using test keys"

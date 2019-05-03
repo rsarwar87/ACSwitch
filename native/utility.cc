@@ -61,7 +61,7 @@ void Utility::printInfo(const vector<string>& args) {
 	cout << "Battery Information\n"
 		<< "\n"
 		<< "Level: " << Battery::getCapacity() << "\n"
-		<< "State: " << Battery::getStatus() << "\n"
+		<< "Status: " << Battery::getStatus() << "\n"
 		<< "\n"
 		<< Module::ID << " Settings\n"
 		<< "\n"

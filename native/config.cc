@@ -93,7 +93,7 @@ void Config::toggleAutomation(const vector<string>& args) {
 		setConfig(AUTOMATION_KEY, AUTOMATION_DISABLED);
 
 	} else {
-		throw("Invalid target state: " + args[0]);
+		throw("Invalid target status: " + args[0]);
 	}
 }
 

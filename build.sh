@@ -43,19 +43,14 @@ function abort {
 }
 
 if [[ -z $ANDROID_NDK_HOME ]]; then
-	abort "Please export Android NDK path to ANDROID_NDK_HOME environment variable"
+	abort "Please export Android NDK path to ANDROID_NDK_HOME variable"
 fi
 if ! command -v zip >/dev/null; then
-	abort "Please install package \"zip\" required to compress source code into zip"
+	abort "Please install \"zip\" package to compress module source tree"
 fi
 
 echo ""
 
 source $BUILDER
 
-echo -e ""
-echo -e "Output zip file: \e[01;32m$OUTZIP\e[0m"
-echo -e ""
-echo -e "\e[01;35mIf you made any changes to original sources, you should consider creating a Pull\e[0m"
-echo -e "\e[01;35mRequest back with your changes so that others too can benefit from them as well.\e[0m"
-echo -e ""
+echo -e "\nResulting zip file: \e[01;32m$OUTZIP\e[0m\n"

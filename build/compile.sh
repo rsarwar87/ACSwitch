@@ -43,7 +43,7 @@ function compile {
 	eval $2 *.cc -Iinclude ${CFLAGS[@]} ${LDLIBS[@]} -s -o $OUTBIN
 
 	if (($? != 0)); then
-		abort "Compile command failed"
+		abort "Compilation failed"
 	fi
 }
 

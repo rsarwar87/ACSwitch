@@ -44,5 +44,5 @@ case $ARCH in
 esac
 
 if (($? != 0)); then
-	abort "Command \`$TOOL $*\` failed"
+	abort "Tooling failed"
 fi
