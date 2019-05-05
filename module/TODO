@@ -1,2 +1,3 @@
 - Fix acs.conf missing in some cases. Reason: Unknown!
+- Support variable sleep intervals in debug script.
 - Support Huawei skip_root workaround in debug script.
