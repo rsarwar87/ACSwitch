@@ -207,14 +207,14 @@ else
 
 	ui_print " "
 	print "Copying files"
-	cp -f $ACSINFO $MODINFO
-	cp -f $BOOTRUN $INITRUN
-	cp -f $ACSEXEC $ACSBIN
+	cp -f $ACSINFO  $MODINFO
+	cp -f $BOOTRUN  $INITRUN
+	cp -f $ACSEXEC  $ACSBIN
 	cp -f $DEBUGGER $CFGFILE $ACSDIR/
 
 	print "Patching acs binary"
-	patchstr $MODULE_ROOT_DEF $DE_DATA $ACSBIN
-	patchstr $UEVENT_DEF $UEVENT_PATH $ACSBIN
+	patchstr $MODULE_ROOT_DEF $DE_DATA     $ACSBIN
+	patchstr $UEVENT_DEF      $UEVENT_PATH $ACSBIN
 
 	print "Setting permissions"
 	set_perm_recursive $ACSDIR  0 0    0700 0600 u:object_r:adb_data_file:s0
