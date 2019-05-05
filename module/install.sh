@@ -137,6 +137,10 @@ on_install() {
   # service.sh to module folder. This is to prevent changing original module
   # structure.
 
+  if [ $API -lt 21 ]; then
+    abort "! Unsupported platform detected!"
+  fi
+
   [ -d /system/xbin ] && BINDIR=$MODPATH/system/xbin || BINDIR=$MODPATH/system/bin
 
   mkdir -p $BINDIR

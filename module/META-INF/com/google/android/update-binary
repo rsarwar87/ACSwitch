@@ -23,6 +23,7 @@ MODULE_ROOT_DEF=/data/adb/modules
 OUTFD=$2
 ZIPFILE=$3
 
+INITDIR=/system/etc/init.d
 DE_DATA=/data/adb
 BOOTMODE=false
 MAGISK_VER=00000
@@ -107,12 +108,17 @@ if [ -f /system/init ]; then
 	mount -o bind /system_root/system /system
 fi
 
+API=$(getprop ro.build.version.sdk /system/build.prop)
+[ $API -ge 21 ] || abort "Unsupported platform ($API) detected"
+
 ARCH=$(getprop ro.product.cpu.abi /system/build.prop)
 case $ARCH in
 	arm*) ARCH=arm ;;
 	x86*) ARCH=x86 ;;
 	*) abort "Unsupported architecture ($ARCH) detected" ;;
 esac
+
+$SYSTEMLESS || [ -d $INITDIR ] || abort "Init.d support is not present"
 
 UEVENT_DEF=/sys/class/power_supply/battery/uevent
 
@@ -186,8 +192,6 @@ if $SYSTEMLESS; then
 else
 	ACSDIR=$DE_DATA/ACSwitch
 
-	INITDIR=/system/etc/init.d
-
 	ACSINFO=$INSTALLER/module.prop
 	DEBUGGER=$INSTALLER/debug.sh
 	BOOTRUN=$INSTALLER/service.sh
@@ -197,8 +201,6 @@ else
 	ACSBIN=/system/bin/acs
 	MODINFO=$ACSDIR/acs.prop
 	INITRUN=$INITDIR/02acsd_launcher
-
-	[ -d $INITDIR ] || abort "Init.d support is not present"
 
 	rm -rf $ACSDIR
 	mkdir -p $ACSDIR
