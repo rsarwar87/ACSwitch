@@ -114,6 +114,12 @@ case $ARCH in
 	*) abort "Unsupported architecture ($ARCH) detected" ;;
 esac
 
+UEVENT_DEF=/sys/class/power_supply/battery/uevent
+
+UEVENT_PATH=$UEVENT_DEF
+[ -f $UEVENT_PATH ] || UEVENT_PATH=/sys/class/power_supply/Battery/uevent
+[ -f $UEVENT_PATH ] || abort "Non-standard device setup detected"
+
 if ! $BOOTMODE; then
 	mount -o bind /dev/urandom /dev/random
 	unset LD_LIBRARY_PATH
@@ -152,14 +158,18 @@ if $SYSTEMLESS; then
 	CFGFILE=$INSTALLER/acs.conf
 
 	[ -d /system/xbin ] && BINDIR=$ACSDIR/system/xbin || BINDIR=$ACSDIR/system/bin
+	ACSBIN=$BINDIR/acs
 
 	rm -rf $ACSDIR
 	mkdir -p $BINDIR
 
 	ui_print " "
 	print "Copying files"
-	cp -f $ACSEXEC $BINDIR/acs
+	cp -f $ACSEXEC $ACSBIN
 	cp -f $ACSINFO $DEBUGGER $BOOTRUN $CFGFILE $ACSDIR/
+
+	print "Patching acs binary"
+	patchstr $UEVENT_DEF $UEVENT_PATH $ACSBIN
 
 	touch $ACSDIR/auto_mount
 
@@ -202,6 +212,7 @@ else
 
 	print "Patching acs binary"
 	patchstr $MODULE_ROOT_DEF $DE_DATA $ACSBIN
+	patchstr $UEVENT_DEF $UEVENT_PATH $ACSBIN
 
 	print "Setting permissions"
 	set_perm_recursive $ACSDIR  0 0    0700 0600 u:object_r:adb_data_file:s0

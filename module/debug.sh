@@ -18,7 +18,10 @@
 
 readonly CACHE_FILE=/cache/ACSwitch.tempfile
 
-readonly UEVENT=/sys/class/power_supply/battery/uevent
+readonly UEVENT=$(
+		ls /sys/class/power_supply/battery/uevent
+	|| ls /sys/class/power_supply/Battery/uevent
+)
 
 function print {
 	echo "- $1"
@@ -48,48 +51,43 @@ print "Finding usable switch"
 
 for DELAY in 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1; do
 
-	while read CHECK_UEVENT; do
-		if grep -q '^POWER_SUPPLY_NAME=.attery$' $CHECK_UEVENT; then
+	while read MAIN_UEVENT; do
+		if grep -q '^POWER_SUPPLY_NAME=' $MAIN_UEVENT; then
 
-			while read MAIN_UEVENT; do
-				if grep -q '^POWER_SUPPLY_NAME=' $MAIN_UEVENT; then
+			for TRIGGER in $(dirname $MAIN_UEVENT)/*; do
+				if ls -l $TRIGGER | grep -Eq '^\-[rx\-]+w[rwx\-]* '; then
 
-					for TRIGGER in $(dirname $MAIN_UEVENT)/*; do
-						if ls -l $TRIGGER | grep -Eq '^\-[rx\-]+w[rwx\-]* '; then
+					case $(cat $TRIGGER) in
+						1)        POS_VAL=1        && NEG_VAL=0        ;;
+						0)        POS_VAL=0        && NEG_VAL=1        ;;
+						on)       POS_VAL=on       && NEG_VAL=off      ;;
+						off)      POS_VAL=off      && NEG_VAL=on       ;;
+						true)     POS_VAL=true     && NEG_VAL=false    ;;
+						false)    POS_VAL=false    && NEG_VAL=true     ;;
+						enable)   POS_VAL=enable   && NEG_VAL=disable  ;;
+						disable)  POS_VAL=disable  && NEG_VAL=enable   ;;
+						enabled)  POS_VAL=enabled  && NEG_VAL=disabled ;;
+						disabled) POS_VAL=disabled && NEG_VAL=enabled  ;;
+						*) continue ;;
+					esac
 
-							case $(cat $TRIGGER) in
-								1)        POS_VAL=1        && NEG_VAL=0        ;;
-								0)        POS_VAL=0        && NEG_VAL=1        ;;
-								on)       POS_VAL=on       && NEG_VAL=off      ;;
-								off)      POS_VAL=off      && NEG_VAL=on       ;;
-								true)     POS_VAL=true     && NEG_VAL=false    ;;
-								false)    POS_VAL=false    && NEG_VAL=true     ;;
-								enable)   POS_VAL=enable   && NEG_VAL=disable  ;;
-								disable)  POS_VAL=disable  && NEG_VAL=enable   ;;
-								enabled)  POS_VAL=enabled  && NEG_VAL=disabled ;;
-								disabled) POS_VAL=disabled && NEG_VAL=enabled  ;;
-								*) continue ;;
-							esac
+					write $NEG_VAL
 
-							write $NEG_VAL
+					if isCharging; then
+						TEMPVAR=$POS_VAL
+						POS_VAL=$NEG_VAL
+						NEG_VAL=$TEMPVAR
+						write $NEG_VAL
+					fi
 
-							if isCharging; then
-								TEMPVAR=$POS_VAL
-								POS_VAL=$NEG_VAL
-								NEG_VAL=$TEMPVAR
-								write $NEG_VAL
-							fi
-
-							if ! isCharging; then
-								write $POS_VAL
-								if isCharging; then
-									echo "Found: <$TRIGGER> <$POS_VAL> <$NEG_VAL>"
-								fi
-							fi
+					if ! isCharging; then
+						write $POS_VAL
+						if isCharging; then
+							echo "Found: <$TRIGGER> <$POS_VAL> <$NEG_VAL>"
 						fi
-					done
+					fi
 				fi
-			done <$CACHE_FILE
+			done
 		fi
 	done <$CACHE_FILE
 done

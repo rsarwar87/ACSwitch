@@ -146,9 +146,21 @@ on_install() {
     x86*) ARCH_32BIT=x86 ;;
   esac
 
+  ACSFILES="bin/acs_$ARCH_32BIT debug.sh service.sh acs.conf"
+
   ui_print "- Extracting module files"
-  unzip -oj "$ZIPFILE" bin/acs_$ARCH_32BIT debug.sh service.sh acs.conf -d $MODPATH >&2
+  unzip -oj "$ZIPFILE" $ACSFILES -d $MODPATH >&2
   mv -f $MODPATH/acs_$ARCH_32BIT $BINDIR/acs
+
+  ui_print "- Patching acs binary"
+
+  UEVENT_DEF=/sys/class/power_supply/battery/uevent
+
+  UEVENT_PATH=$UEVENT_DEF
+  [ -f $UEVENT_PATH ] || UEVENT_PATH=/sys/class/power_supply/Battery/uevent
+  [ -f $UEVENT_PATH ] || abort "! Non-standard device setup detected!"
+
+  sed -i "s|$UEVENT_DEF|$UEVENT_PATH|g" $BINDIR/acs
 }
 
 # Only some special files require specific permissions

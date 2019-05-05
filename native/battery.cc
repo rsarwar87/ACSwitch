@@ -30,13 +30,15 @@ using namespace std;
 using namespace chrono;
 using namespace this_thread;
 
+static const string UEVENT_DEF = "/sys/class/power_supply/battery/uevent";
+
 static const string CAPACITY_EVENT = "POWER_SUPPLY_CAPACITY";
 static const string STATUS_EVENT = "POWER_SUPPLY_STATUS";
 
 static const string STATUS_CHARGING = "Charging";
 
 static string getEvent(const string& event) {
-	return Shared::getProperty(event, dirname(Config::getTrigger().c_str()) + "/uevent"s);
+	return Shared::getProperty(event, UEVENT_DEF);
 }
 
 static void writeTrigger(const string& val) {
