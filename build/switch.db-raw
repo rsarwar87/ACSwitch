@@ -30,6 +30,7 @@
 /sys/devices/platform/7000c400.i2c/i2c-1/1-006b/charging_state enabled disabled
 /sys/devices/platform/battery/CCIChargerSwitch 1 0
 /sys/devices/platform/battery/ChargerEnable 1 0
+/sys/devices/platform/battery/power_supply/battery/batt_slate_mode 0 1
 /sys/devices/platform/huawei_charger/enable_charger 1 0
 /sys/devices/platform/mt-battery/disable_charger 0 1
 /sys/devices/platform/omap/omap_i2c.3/i2c-3/3-005f/charge_enable 1 0
