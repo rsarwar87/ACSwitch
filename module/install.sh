@@ -133,8 +133,8 @@ on_install() {
   # The following is the default implementation: extract $ZIPFILE/system to $MODPATH
   # Extend/change the logic to whatever you want
 
-  # Although LATESTARTSERVICE is disabled in config section above, we do copy
-  # service.sh to module folder. This is to prevent changing original module
+  # Although LATESTARTSERVICE is disabled in config section above, we extract
+  # service.sh to module folder. This was to prevent changing original module
   # structure.
 
   if [ $API -lt 21 ]; then

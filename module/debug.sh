@@ -94,4 +94,4 @@ done
 
 echo -e \
 "\nPlease post output above along with your device name and architecture to the
-Telegram Support Group (https://t.me/joinchat/JUfXGwuAuzKxo5boALVf1w)."
+Telegram Support group (https://t.me/joinchat/JUfXGwuAuzKxo5boALVf1w)."
